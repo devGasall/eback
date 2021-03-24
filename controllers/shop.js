@@ -5,8 +5,9 @@ exports.create=(req,res)=>{
     const shop =new Shop(req.body)
     shop.save((error,data)=>{
         if(error){
+            console.log(error)
             return res.status(400).json({
-                error:"impossible de creer cette boutique"
+                error:error.errmsg
                 })
             }
         res.json(data)
@@ -30,8 +31,8 @@ exports.read = (req,res)=>{
 exports.update=(req,res)=>{
     const shop = req.shop
     shop.name=req.body.name
-    shop.address= req.body.address
-    shop.number= req.body.number
+    shop.addresse= req.body.addresse
+    shop.tel= req.body.tel
     shop.save((error,data)=>{
         if(error){
             console.log(error)

@@ -7,8 +7,7 @@ const ShopSchema = new mongoose.Schema({
     },
     addresse:{
         type:String,
-        require:true,
-        unique:true
+        unique:false
     },
     tel:{
         type:String,
