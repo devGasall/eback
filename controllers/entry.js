@@ -58,6 +58,7 @@ exports.remove = (req, res) => {
     })
 }
 
+
 exports.list = (req, res) => {
     Entry.find()
         .populate("shop")

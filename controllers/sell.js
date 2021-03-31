@@ -12,6 +12,7 @@ exports.create = (req, res) => {
         res.json(data)
     })
 }
+
 exports.sellById = (req, res, next, id) => {
     Sell.findById(id)
         .populate("shop")

@@ -1,5 +1,6 @@
 const Product = require('../model/product')
 const mongoose = require('mongoose')
+const Entry = require('../model/entry')
 
 exports.create = (req, res) => {
     const product = new Product(req.body)
@@ -55,15 +56,35 @@ exports.remove = (req, res) => {
     })
 }
 
-exports.list = (req, res) => {
-    Product.find({})
-        .populate("category")
-        .exec((error, data) => {
-            if (error) {
-                return res.status(400).json({
-                    error: "les produits ne sont pas recupperable pour l'instant"
-                })
-            }
-            res.json(data)
-        })
+exports.list = (req,res) =>{
+    Product.find()
+      .populate('category')
+      .exec((error,data)=>{
+        if(error){
+            return res.status(400).json({
+                error :"les produits ne sont pas chargeable pour l'instant"
+            })
+        }
+        res.json(data)
+    })
 }
+
+exports.stock=(req,res)=>{
+    Entry.aggregate([
+        {$group : {
+            _id:"$product",total_Entry:{$sum:"$quantity"}
+          }},
+        {$lookup:{
+            from:Product.collection.name,
+            localField:"_id",
+            foreignField:"_id",
+            as:"cProduct"
+        }},
+    ]).exec((error,data)=>{
+        if(error){
+            return res.status(400).json({
+                error :"le stock ne peut etre obtenu"
+            })
+        }
+        res.json(data)
+    })
