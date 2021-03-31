@@ -13,7 +13,7 @@ exports.create=(req,res)=>{
     })
 }
 exports.sellById=(req,res,next,id)=>{
-     Sell.findById(id).exec((error,data)=>{
+     Sell.findById(id).populate('shop').populate('product').exec((error,data)=>{
          if(error || !data){
              return res.status(400).json({
                  error:"cette vente est introuvable"

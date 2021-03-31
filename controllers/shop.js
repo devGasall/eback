@@ -30,8 +30,6 @@ exports.read = (req,res)=>{
 
 exports.update=(req,res)=>{
     const shop = req.shop
-    shop.name=req.body.name
-    shop.addresse= req.body.addresse
     shop.tel= req.body.tel
     shop.save((error,data)=>{
         if(error){

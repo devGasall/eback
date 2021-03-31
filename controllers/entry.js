@@ -56,13 +56,14 @@ exports.remove=(req,res)=>{
 }
 
 exports.list = (req,res) =>{
-Entry.find().exec((error,data)=>{
+Entry.find().populate('shop').populate('product').exec((error,data)=>{
     if(error){
         return res.status(400).json({
             error:'impossible de charger les entrees'
         })
     }
     res.json(data)
+    
 })
 }
 
