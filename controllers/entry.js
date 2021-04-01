@@ -74,9 +74,21 @@ exports.list = (req, res) => {
 
 
 exports.entryByShop = async (req, res) => {
-    const entry = await Entry.aggregate([{
-        $match: { shop: req.shop._id }
-    }])
+    const entry = await Entry.aggregate([
+        {$match: { shop: req.shop._id } },
+        {$lookup:{
+            from:"shops",
+            localField:"shop",
+            foreignField:"_id",
+            as:"lshop"
+        }},
+        {$lookup:{
+            from:"products",
+            localField:"product",
+            foreignField:"_id",
+            as:"lproduct"
+        }},
+    ])
 
     console.log(entry)
     res.send(entry)
