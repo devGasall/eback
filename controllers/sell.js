@@ -2,9 +2,9 @@ const Sell = require('../model/sell')
 
 
 exports.create = (req, res) => {
-    const sell = new Sell(req.body)
-    sell.save((error, data) => {
-        if (error || !data) {
+    const sells = req.body
+Sell.insertMany(sells,(error, data) => {
+        if (req.error || !data) {
             return res.status(400).json({
                 error: "impossible de d'ajouter la vente"
             })

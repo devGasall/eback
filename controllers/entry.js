@@ -2,8 +2,8 @@ const Entry = require('../model/entry')
 
 
 exports.create = (req, res) => {
-    const entry = new Entry(req.body)
-    entry.save((error, data) => {
+    const entries = req.body
+    Entry.insertMany(entries,(error, data) => {
         if (error || !data) {
             return res.status(400).json({
                 error: "impossible de d'ajouter la quantite prise"
