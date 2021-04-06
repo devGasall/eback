@@ -1,4 +1,5 @@
 const Product = require('../model/product')
+const Entry = require('../model/entry')
 const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
