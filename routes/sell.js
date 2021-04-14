@@ -11,6 +11,5 @@ router.get('/sells',list)
 router.get("/sells/today/:shopId",todayListByShop)
 
 router.param('sellId',sellById)
-router.param('shopId',shopById)
 
 module.exports = router

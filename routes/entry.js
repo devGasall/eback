@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const {create,read,update,entryById,remove,list,entryByShop} = require('../controllers/entry')
-const {productById}=require('../controllers/product')
 const {shopById}=require('../controllers/shop')
 
 router.post('/entry',create)
