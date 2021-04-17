@@ -57,7 +57,7 @@ exports.remove = (req, res) => {
 }
 
 exports.list = (req, res) => {
-    Product.find({})
+    Product.find()
         .populate("category")
         .exec((error, data) => {
             if (error) {
