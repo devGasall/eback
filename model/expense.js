@@ -9,8 +9,9 @@ const ExpenseSchema = new mongoose.Schema({
     user:{
         type:ObjectId,
         ref:'User',
+        required:true
     },
-    desccription:{
+    description:{
         type:String,
         required:true
     },

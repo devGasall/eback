@@ -1,12 +1,12 @@
 const Expense = require('../model/expense')
-
+const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
-    const expenses = req.body
-Sell.insertMany(expenses,(error, data) => {
-        if (req.error || !data) {
+const expense = new Expense(req.body)
+expense.save((error, data) => {
+        if (error || !data) {
             return res.status(400).json({
-                error: "impossible de d'ajouter la vente"
+                error
             })
         }
         res.json(data)
@@ -19,7 +19,7 @@ exports.expenseById = (req, res, next, id) => {
         .exec((error, data) => {
             if (error || !data) {
                 return res.status(400).json({
-                    error: "cette vente est introuvable"
+                    error: "cette depense est introuvable"
                 })
             }
             req.expense = data
@@ -31,25 +31,25 @@ exports.read = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    const expense = req.expense
-    expense.save((error, data) => {
+    mongoose.set('useFindAndModify', false);
+    const { _id } = req.expense
+    Expense.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
         if (error) {
-            console.log(error)
             return res.status(400).json({
-                error: 'cette vente ne peut etre modifiee'
+                error: "cette depense ne peut etre modifier"
             })
         }
         res.json(data)
     })
+
 }
 
 exports.remove = (req, res) => {
-    console.log(req.expense)
     const expense = req.expense
     expense.remove((error, data) => {
         if (error) {
             return res.status(400).json({
-                error: 'cette vente ne peut etre supprimee'
+                error: 'cette depense ne peut etre supprimee'
             })
         }
         res.json(data)
@@ -57,21 +57,28 @@ exports.remove = (req, res) => {
 }
 
 exports.list = (req, res) => {
-    let sortBy =req.query.sortBy ?req.query.sortBy:'createdAt'
-    let fromDate= req.query.fromDate ? new Date(req.query.fromDate) : new Date().setHours(0,0,0)
-    let toDAte= req.query.toDate ?new Date(req.query.toDate):new Date()
-    if(toDAte>Date.now() || toDAte<fromDate){
-        toDAte=new Date()
-    }
-
-    Expense.find({createdAt:{$gte:fromDate,$lte:toDAte}})
+   
+    Expense.find()
         .populate("shop")
-        .populate("product")
+        .populate("users")
         .sort(sortBy)
         .exec((error, data) => {
             if (error) {
                 return res.status(400).json({
-                    error: 'impossible de charger les ventes'
+                    error: 'impossible de charger les depenses'
+                })
+            }
+            res.json(data)
+        })
+}
+
+exports.expensesByShop = async (req, res) => {
+    console.log(req.shop)
+    const expenses = await Expense.find({shop:req.shop._id})
+        .exec((error,data)=>{
+            if (error) {
+                return res.status(400).json({
+                    error: 'impossible de charger les depenses de cette boutuque'
                 })
             }
             res.json(data)

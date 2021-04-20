@@ -16,6 +16,8 @@ const productRoutes = require('./routes/product')
 const sellRoutes = require('./routes/sell')
 const shopRoutes = require('./routes/shop')
 const versementRoutes= require('./routes/versement')
+const expenseRoutes= require('./routes/expense')
+const returnsRoutes= require('./routes/returns')
 
 //app
 const app=express();
@@ -46,6 +48,8 @@ mongoose.connect(process.env.DATABASE,{
  app.use('/api',sellRoutes)
  app.use('/api',shopRoutes)
  app.use('/api',versementRoutes)
+ app.use('/api',expenseRoutes)
+ app.use('/api',returnsRoutes)
 
 app.get('/',(req,res)=>{
     console.log("req recu")
