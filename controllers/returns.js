@@ -1,5 +1,5 @@
 const Returns = require('../model/returns')
-
+const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
     const returns = req.body
@@ -31,14 +31,12 @@ exports.read = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    const returns = req.returns
-    returns = req.body
-
-    returns.save((error, data) => {
+    mongoose.set('useFindAndModify', false);
+    const { _id } = req.returns
+    Returns.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
         if (error) {
-            console.log(error)
             return res.status(400).json({
-                error: 'cet retour ne peut etre modifiee'
+                error: "cet retour ne peut etre modifier"
             })
         }
         res.json(data)
@@ -72,12 +70,12 @@ exports.list = (req, res) => {
 }
 
 
-exports.returnsByShop = async (req, res) => {
-    const returns = await Returns.find({shop:req.body.shop._id})
+exports.returnsByShop =  (req, res) => {
+    Returns.find({shop:req.shop._id})
         .exec((error,data)=>{
             if (error) {
                 return res.status(400).json({
-                    error: 'impossible de charger les ventes'
+                    error: 'impossible de charger les retours'
                 })
             }
             res.json(data)

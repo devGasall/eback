@@ -11,5 +11,6 @@ router.get('/returns/shop/:shopId',returnsByShop)
 router.get('/returns',list)
 
 router.param('returnsId',returnsById)
+router.param('shopId',shopById)
 
 module.exports = router
