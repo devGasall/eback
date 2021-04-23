@@ -16,6 +16,7 @@ exports.returnsById = (req, res, next, id) => {
     Returns.findById(id)
         .populate("shop")
         .populate("product")
+        .populate('user')
         .exec((error, data) => {
             if (error || !data) {
                 return res.status(400).json({
@@ -59,6 +60,7 @@ exports.list = (req, res) => {
     Returns.find()
         .populate("shop")
         .populate("user")
+        .populate('product')
         .exec((error, data) => {
             if (error) {
                 return res.status(400).json({
