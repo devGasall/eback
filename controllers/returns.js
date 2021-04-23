@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
     const returns = req.body
-    Returns.insertMany(returns,(error, data) => {
+    Returns.insertMany(returns, (error, data) => {
         if (error || !data) {
             return res.status(400).json({
                 error: "impossible de d'ajouter le retour"
@@ -72,9 +72,9 @@ exports.list = (req, res) => {
 }
 
 
-exports.returnsByShop =  (req, res) => {
-    Returns.find({shop:req.shop._id})
-        .exec((error,data)=>{
+exports.returnsByShop = (req, res) => {
+    Returns.find({ shop: req.shop._id })
+        .exec((error, data) => {
             if (error) {
                 return res.status(400).json({
                     error: 'impossible de charger les retours'

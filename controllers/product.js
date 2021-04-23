@@ -69,21 +69,25 @@ exports.list = (req, res) => {
         })
 }
 
-exports.stock=(req,res)=>{
+exports.stock = (req, res) => {
     Entry.aggregate([
-        {$group : {
-            _id:"$product",total_Entry:{$sum:"$quantity"}
-          }},
-        {$lookup:{
-            from:Product.collection.name,
-            localField:"_id",
-            foreignField:"_id",
-            as:"cProduct"
-        }},
-    ]).exec((error,data)=>{
-        if(error){
+        {
+            $group: {
+                _id: "$product", total_Entry: { $sum: "$quantity" }
+            }
+        },
+        {
+            $lookup: {
+                from: Product.collection.name,
+                localField: "_id",
+                foreignField: "_id",
+                as: "cProduct"
+            }
+        },
+    ]).exec((error, data) => {
+        if (error) {
             return res.status(400).json({
-                error :"le stock ne peut etre obtenu"
+                error: "le stock ne peut etre obtenu"
             })
         }
         res.json(data)
