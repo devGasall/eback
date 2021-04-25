@@ -89,7 +89,5 @@ exports.entryByShop = async (req, res) => {
             as:"lproduct"
         }},
     ])
-
-    console.log(entry)
     res.send(entry)
 }
