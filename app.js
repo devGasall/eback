@@ -18,6 +18,7 @@ const shopRoutes = require('./routes/shop')
 const versementRoutes= require('./routes/versement')
 const expenseRoutes= require('./routes/expense')
 const returnsRoutes= require('./routes/returns')
+const photoRoutes = require('./routes/photo')
 
 //app
 const app=express();
@@ -41,15 +42,17 @@ mongoose.connect(process.env.DATABASE,{
 })
 
 //route
- app.use('/api',userRoutes);
- app.use('/api',categoryRoutes)
- app.use('/api',productRoutes)
- app.use('/api',entryRoutes)
- app.use('/api',sellRoutes)
- app.use('/api',shopRoutes)
- app.use('/api',versementRoutes)
- app.use('/api',expenseRoutes)
- app.use('/api',returnsRoutes)
+app.use('/api',userRoutes);
+app.use('/api',categoryRoutes)
+app.use('/api',productRoutes)
+app.use('/api',entryRoutes)
+app.use('/api',sellRoutes)
+app.use('/api',shopRoutes)
+app.use('/api',versementRoutes)
+app.use('/api',expenseRoutes)
+app.use('/api',returnsRoutes)
+app.use('/api',photoRoutes)
+
 
 app.get('/',(req,res)=>{
     console.log("req recu")

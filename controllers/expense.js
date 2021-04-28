@@ -2,11 +2,11 @@ const Expense = require('../model/expense')
 const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
-const expense = new Expense(req.body)
-expense.save((error, data) => {
+const expenses = new Expense(req.body)
+Expense.insertMany(expenses,(error, data) => {
         if (error || !data) {
             return res.status(400).json({
-                error
+                error:"les depenses non pas pu etre enregistre"
             })
         }
         res.json(data)
