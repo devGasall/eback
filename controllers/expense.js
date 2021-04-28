@@ -2,11 +2,13 @@ const Expense = require('../model/expense')
 const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
-const expense = new Expense(req.body)
-expense.save((error, data) => {
+    const expenses = req.body
+    // console.log(expenses)
+    // return
+    Expense.insertMany(expenses, (error, data) => {
         if (error || !data) {
             return res.status(400).json({
-                error
+                error: "impossible d'ajouter expenses"
             })
         }
         res.json(data)
@@ -57,11 +59,11 @@ exports.remove = (req, res) => {
 }
 
 exports.list = (req, res) => {
-   
+
     Expense.find()
         .populate("shop")
-        .populate("users")
-        .sort(sortBy)
+        // .populate("users")
+        // .sort(sortBy)
         .exec((error, data) => {
             if (error) {
                 return res.status(400).json({
@@ -74,8 +76,8 @@ exports.list = (req, res) => {
 
 exports.expensesByShop = async (req, res) => {
     console.log(req.shop)
-    const expenses = await Expense.find({shop:req.shop._id})
-        .exec((error,data)=>{
+    const expenses = await Expense.find({ shop: req.shop._id })
+        .exec((error, data) => {
             if (error) {
                 return res.status(400).json({
                     error: 'impossible de charger les depenses de cette boutuque'
