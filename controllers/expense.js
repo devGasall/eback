@@ -2,7 +2,7 @@ const Expense = require('../model/expense')
 const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
-const expenses = new Expense(req.body)
+const expenses = req.body
 Expense.insertMany(expenses,(error, data) => {
         if (error || !data) {
             return res.status(400).json({
@@ -14,8 +14,7 @@ Expense.insertMany(expenses,(error, data) => {
 }
 exports.expenseById = (req, res, next, id) => {
     Expense.findById(id)
-        .populate("shop")
-        .populate("user")
+        .populate("Shop")
         .exec((error, data) => {
             if (error || !data) {
                 return res.status(400).json({
@@ -59,11 +58,10 @@ exports.remove = (req, res) => {
 exports.list = (req, res) => {
    
     Expense.find()
-        .populate("shop")
-        .populate("users")
-        .sort(sortBy)
+        .populate('Shop')
         .exec((error, data) => {
             if (error) {
+                console.log(error)
                 return res.status(400).json({
                     error: 'impossible de charger les depenses'
                 })

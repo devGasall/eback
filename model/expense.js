@@ -3,14 +3,14 @@ const {ObjectId}= mongoose.Schema
 const ExpenseSchema = new mongoose.Schema({
     shop:{
         type:ObjectId,
-        ref:'Shop',
+        ref:'shop',
         required:true,
     },
-    user:{
-        type:ObjectId,
-        ref:'User',
-        required:true
-    },
+    // user:{
+    //     type:ObjectId,
+    //     ref:'User',
+    //     required:true
+    // },
     description:{
         type:String,
         required:true
