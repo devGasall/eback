@@ -14,19 +14,19 @@ const productSchema = new mongoose.Schema({
         required:true,
     },
     price:{
-            commande_price:{
-                type:Number,
-                required:true,
-            },
-            shop_price:{
-                type:Number,
-                required:true,
-            },
-            sell_price:{
-                type:Number,
-                required:false,
-            }
-        },       
+        commande_price:{
+            type:Number,
+            required:true,
+        },
+        shop_price:{
+            type:Number,
+            required:true,
+        },
+        sell_price:{
+            type:Number,
+            required:false,
+        }
+    },   
     category:{
         type:ObjectId,
         ref:'Category',

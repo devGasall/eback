@@ -3,12 +3,10 @@ const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
     const expenses = req.body
-    // console.log(expenses)
-    // return
     Expense.insertMany(expenses, (error, data) => {
         if (error || !data) {
             return res.status(400).json({
-                error: "impossible d'ajouter expenses"
+                error: "les depenses non pas pu etre enregistre"
             })
         }
         res.json(data)
@@ -16,8 +14,7 @@ exports.create = (req, res) => {
 }
 exports.expenseById = (req, res, next, id) => {
     Expense.findById(id)
-        .populate("shop")
-        .populate("user")
+        .populate("Shop")
         .exec((error, data) => {
             if (error || !data) {
                 return res.status(400).json({
@@ -35,6 +32,8 @@ exports.read = (req, res) => {
 exports.update = (req, res) => {
     mongoose.set('useFindAndModify', false);
     const { _id } = req.expense
+    // console.log(req.body)
+    // return
     Expense.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
         if (error) {
             return res.status(400).json({
@@ -61,11 +60,10 @@ exports.remove = (req, res) => {
 exports.list = (req, res) => {
 
     Expense.find()
-        .populate("shop")
-        // .populate("users")
-        // .sort(sortBy)
+        .populate('shop')
         .exec((error, data) => {
             if (error) {
+                console.log(error)
                 return res.status(400).json({
                     error: 'impossible de charger les depenses'
                 })
