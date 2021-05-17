@@ -13,7 +13,9 @@ exports.create = (req, res) => {
     })
 }
 exports.versementById = (req, res, next, id) => {
-    Versement.findById(id).exec((error, data) => {
+    Versement.findById(id)
+    .populate('shop')
+    .exec((error, data) => {
         if (error || !data) {
             return res.status(400).json({
                 error: "cette vente est introuvable"
