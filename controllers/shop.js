@@ -29,19 +29,17 @@ exports.read = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    const shop = req.shop
-    shop.name = req.body.name
-    shop.addresse = req.body.addresse
-    shop.tel = req.body.tel
-    shop.save((error, data) => {
+    mongoose.set('useFindAndModify', false);
+    const { _id } = req.shop
+    Shop.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
         if (error) {
-            console.log(error)
             return res.status(400).json({
-                error: 'ce entree ne peut etre modifiee'
+                error: "ce produit ne peut etre modifier"
             })
         }
         res.json(data)
     })
+
 }
 
 exports.remove = (req, res) => {

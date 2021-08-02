@@ -1,5 +1,5 @@
 const Entry = require('../model/entry')
-
+const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
     const entries = req.body
@@ -31,18 +31,17 @@ exports.read = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    const entry = req.entry
-    entry.quantity = req.body.quantity
-
-    entry.save((error, data) => {
+    mongoose.set('useFindAndModify', false);
+    const { _id } = req.entry
+    Product.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
         if (error) {
-            console.log(error)
             return res.status(400).json({
-                error: 'cette entree ne peut etre modifiee'
+                error: "cet entree ne peut etre modifier"
             })
         }
         res.json(data)
     })
+
 }
 
 exports.remove = (req, res) => {
@@ -51,7 +50,7 @@ exports.remove = (req, res) => {
     entry.remove((error, data) => {
         if (error) {
             return res.status(400).json({
-                error: 'cette entrre ne peut etre supprimee'
+                error: 'cette entree ne peut etre supprimee'
             })
         }
         res.json(data)
@@ -74,20 +73,15 @@ exports.list = (req, res) => {
 
 
 exports.entryByShop = async (req, res) => {
-    const entry = await Entry.aggregate([
-        {$match: { shop: req.shop._id } },
-        {$lookup:{
-            from:"shops",
-            localField:"shop",
-            foreignField:"_id",
-            as:"lshop"
-        }},
-        {$lookup:{
-            from:"products",
-            localField:"product",
-            foreignField:"_id",
-            as:"lproduct"
-        }},
-    ])
-    res.send(entry)
+    Entry.find({shop:req.shop._id})
+        .populate('product')
+        .populate('shop')
+        .exec((error, data) => {
+            if (error) {
+                return res.status(400).json({
+                    error: 'impossible de charger les entrees pour cette boutique. '
+                })
+            }
+            res.json(data)
+    })
 }

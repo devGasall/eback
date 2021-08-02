@@ -8,7 +8,7 @@ let cors = require('cors');
 require('dotenv').config();
 
 
-//import 
+//imported routes
 const userRoutes = require('./routes/user');
 const categoryRoutes = require('./routes/category')
 const entryRoutes = require('./routes/entry')
@@ -19,7 +19,8 @@ const versementRoutes = require('./routes/versement')
 const expenseRoutes = require('./routes/expense')
 const returnsRoutes = require('./routes/returns')
 const photoRoutes = require('./routes/photo')
-
+const commandRoutes = require('./routes/command')
+const commandedRoutes = require('./routes/commanded')
 //app
 const app = express();
 
@@ -52,6 +53,8 @@ app.use('/api', versementRoutes)
 app.use('/api', expenseRoutes)
 app.use('/api', returnsRoutes)
 app.use('/api', photoRoutes)
+app.use('/api',commandRoutes)
+app.use('/api',commandedRoutes)
 
 
 app.get('/', (req, res) => {
