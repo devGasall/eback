@@ -1,15 +1,44 @@
 const Sell = require('../model/sell')
-
+const Product = require('../model/product')
 
 exports.create = (req, res) => {
     const sells = req.body
 Sell.insertMany(sells,(error, data) => {
-        if (req.error || !data) {
-            return res.status(400).json({
+    const errors=[]
+        if (error || !data) {
+            errors.push({
                 error: "impossible de d'ajouter la vente"
             })
         }
-        res.json(data)
+            data.map((sell)=>{
+                Product.findById(sell.product)
+                .exec((error,product)=>{
+                    if (error || !product) {
+                        errors.push({
+                            error: "impossible de retrouver les produits"
+                        })
+                    }
+                    product.quantity=product.quantity-sell.quantity
+                    product.sold=product.sold+sell.quantity
+                        product.save((error,selledProduct)=>{
+                            if (error || !selledProduct) {
+                                errors.push({
+                                    error: error
+                                })
+                            }
+
+                            if(errors.length != 0){
+                                console.log(errors)
+                                res.status(400).json(errors)
+                            }else{
+                                res.json(data)
+                            }
+                        })
+
+                })
+                
+            })
+        
     })
 }
 exports.sellById = (req, res, next, id) => {
@@ -31,29 +60,75 @@ exports.read = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    const sell = req.sell
-    sell.quantity = req.body.quantity
-
-    sell.save((error, data) => {
-        if (error) {
-            console.log(error)
-            return res.status(400).json({
-                error: 'cette vente ne peut etre modifiee'
+    mongoose.set('useFindAndModify', false);
+    const { _id, productId } = req.sell
+    const errors=[]
+    Expense.findByIdAndUpdate(_id, req.body, { new: true }, (updatingError, data) => {
+        if (updatingError) {
+            errors.push({
+                error: "cette vente ne peut etre modifier"
             })
         }
-        res.json(data)
+
+                const quantity =req.body.quantity - req.sell.quantity
+                const sold = req.sell.quantity-req.body.sold
+                Product.findById(productId)
+                .exec((findingError,product)=>{
+                    if (findingError) {
+                        errors.push({
+                            error: "le produit ne peut etre trouver"
+                        })
+                    }
+                    product.quantity=product.quantity+quantity
+                    product.sold=product.sold-sold
+                    product.save((updatingProductError,updatedProduct)=>{
+                        if (updatingProductError) {
+                            errors.push({
+                                error: "l'ancien produit ne peut etre modifier"
+                            })
+                        }
+                        if(errors.length!==0){
+                            res.status(400).json(errors)
+                        }
+                        res.json([data,updatedProduct])
+                    })
+
+                })
+                
     })
 }
 
 exports.remove = (req, res) => {
-    console.log(req.sell)
+    const errors=[]
     const sell = req.sell
     sell.remove((error, data) => {
         if (error) {
-            return res.status(400).json({
+            errors.push({
                 error: 'cette vente ne peut etre supprimee'
             })
         }
+            Product.findById(sell.product)
+            .exec((findingproductError,product)=>{
+                if (findingproductError) {
+                    errors.push({
+                        error: 'le produit concerne ne peut etre modifier'
+                    })
+                }
+                    product.quantity=product.quantity+sell.quantity
+                    product.sold=product.sold-sell.quantity
+                    product.save((updatingProductError,updatedProduct)=>{
+                        if (updatingProductError) {
+                            errors.push({
+                                error: "l'ancien produit ne peut etre modifier"
+                            })
+                        }
+                        if(errors.length!==0){
+                            res.status(400).json(errors)
+                        }
+                        res.json([data,updatedProduct])
+                    })
+
+            })
         res.json(data)
     })
 }
@@ -65,7 +140,6 @@ exports.list = (req, res) => {
     if(toDAte>Date.now() || toDAte<fromDate){
         toDAte=new Date()
     }
-    console.log("from Date ", fromDate,"to Date ",toDAte)
 
     Sell.find({createdAt:{$gte:fromDate,$lte:toDAte}})
         .populate("shop")
@@ -88,7 +162,7 @@ exports.todayListByShop = (req, res) => {
         .populate('shop')
         .exec((error, data) => {
             if (error) {
-                return res.status(400).json({
+                return res.json({
                     error: 'impossible de charger les ventes d\'aujourd\'hui'
                 })
             }

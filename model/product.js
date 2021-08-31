@@ -3,7 +3,8 @@ const {ObjectId}=mongoose.Schema
 const productSchema = new mongoose.Schema({
     name:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     description:{
         type:String,
@@ -13,6 +14,11 @@ const productSchema = new mongoose.Schema({
         type:Number,
         required:true,
     },
+    sold:{
+        type:Number,
+        required:true,
+        default:0
+    }, 
     price:{
         type:Number,
         required:true,
@@ -21,7 +27,7 @@ const productSchema = new mongoose.Schema({
         type:ObjectId,
         ref:'Category',
         required:true,
-    }
+    },
 },{timestamps:true})
 
 module.exports= mongoose.model("Product",productSchema)

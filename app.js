@@ -21,6 +21,7 @@ const returnsRoutes = require('./routes/returns')
 const photoRoutes = require('./routes/photo')
 const commandRoutes = require('./routes/command')
 const commandedRoutes = require('./routes/commanded')
+const inventory = require('./routes/inventory')
 //app
 const app = express();
 
@@ -53,8 +54,9 @@ app.use('/api', versementRoutes)
 app.use('/api', expenseRoutes)
 app.use('/api', returnsRoutes)
 app.use('/api', photoRoutes)
-app.use('/api',commandRoutes)
-app.use('/api',commandedRoutes)
+app.use('/api', commandRoutes)
+app.use('/api', commandedRoutes)
+app.use('/api', inventory)
 
 
 app.get('/', (req, res) => {
