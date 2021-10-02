@@ -59,14 +59,12 @@ exports.update = (req, res) => {
     mongoose.set('useFindAndModify', false);
     const { _id } = req.commanded
     const errors=[]
-    const datas=[]
     Commanded.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
         if (error) {
             errors.push({
                 error: "cette commande ne peut etre modifier"
             })
         }else{
-            datas.push(data)
             Product.findById(data.prodcut)
             .exec((errorFindingProduct,product)=>{
                 if (errorFindingProduct) {
@@ -81,7 +79,6 @@ exports.update = (req, res) => {
                                 errorModifyingProduct: "le produit correspondant ne peut etre trouver"
                             })
                         }
-                        datas.push(modifiedProduct)
                     })
                 }
             })
@@ -89,8 +86,9 @@ exports.update = (req, res) => {
 
         if(errors.length>0){
             res.status(400).json(errors)
+            errors=[]
         }else{
-            res.json(datas)
+            res.json(data)
         }
         
     })

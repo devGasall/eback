@@ -69,9 +69,6 @@ exports.update = (req, res) => {
                 error: "cette vente ne peut etre modifier"
             })
         }
-
-                const quantity =req.body.quantity - req.sell.quantity
-                const sold = req.sell.quantity-req.body.sold
                 Product.findById(productId)
                 .exec((findingError,product)=>{
                     if (findingError) {
@@ -79,8 +76,8 @@ exports.update = (req, res) => {
                             error: "le produit ne peut etre trouver"
                         })
                     }
-                    product.quantity=product.quantity+quantity
-                    product.sold=product.sold-sold
+                    product.quantity=product.quantity+ req.body.quantity - req.sell.quantity
+                    product.sold=product.sold-req.sell.quantity+req.body.quantity
                     product.save((updatingProductError,updatedProduct)=>{
                         if (updatingProductError) {
                             errors.push({
