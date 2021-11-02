@@ -11,7 +11,7 @@ const commandedSchema = new mongoose.Schema({
         ref:'Product',
         required:true,
     },
-    price:{
+    commandPrice:{
         type:Number,
         required:true
     },
