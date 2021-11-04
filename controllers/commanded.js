@@ -14,7 +14,7 @@ exports.create = (req,res) => {
         datas.map((data)=>{
             Product.findById(data.product)
             .exec((error,product)=>{
-                if(error || !prodcut){
+                if(error || !product){
                     errors.push({
                         error:"impossible de trouver le produit correspondant"
                         })
