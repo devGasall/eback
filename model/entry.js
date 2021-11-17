@@ -1,6 +1,14 @@
 const mongoose = require('mongoose')
 const {ObjectId}= mongoose.Schema
 const EntrySchema = new mongoose.Schema({
+    mat:{
+        type:Number,
+        required:true
+    },
+    matricule:{
+        type:String,
+        required:true
+    },
     shop:{
         type:ObjectId,
         ref:'Shop',

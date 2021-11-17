@@ -1,5 +1,6 @@
 const Sell = require('../model/sell')
 const Product = require('../model/product')
+const {genMatricule} = require('./matricule')
 
 exports.create = (req, res) => {
     const sells = req.body
@@ -171,4 +172,25 @@ exports.todayListByShop = (req, res) => {
             res.json(datas)
         })
 
+}
+
+exports.sellMatricule=(req,res)=>{
+    Sell.find()
+    .limit(1)
+    .sort({$natural:-1})
+    .select('mat')
+    .exec((error,data)=>{
+        if (error) {
+            return res.json({
+                error: 'impossible de charger la dernirer matricule'
+            })
+        }
+        if(data.length>0 && data[0].mat != undefined){
+            const matricule = genMatricule("VEB-",data[0].mat+1)
+            res.json({mat:data[0].mat+1,matricule:matricule})
+        }else{
+            const matricule = genMatricule("VEB-",1)
+            res.json({mat:1,matricule:matricule})        }
+        
+    })
 }

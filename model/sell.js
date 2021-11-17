@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 const {ObjectId}= mongoose.Schema
 const SellSchema = new mongoose.Schema({
+    mat:{
+        type:Number,
+        required:true
+    },
     shop:{
         type:ObjectId,
         ref:'Shop',

@@ -1,5 +1,6 @@
 const Entry = require('../model/entry')
 const mongoose = require('mongoose')
+const {genMatricule} =require('./matricule')
 
 exports.create = (req, res) => {
     const entries = req.body
@@ -83,5 +84,26 @@ exports.entryByShop = async (req, res) => {
                 })
             }
             res.json(data)
+    })
+}
+
+exports.entryMatricule=(req,res)=>{
+    Entry.find()
+    .limit(1)
+    .sort({$natural:-1})
+    .select('mat')
+    .exec((error,data)=>{
+        if (error) {
+            return res.json({
+                error: 'impossible de charger le dernier matricule'
+            })
+        }
+        if(data.length>0 && data[0].mat != undefined){
+            const matricule = genMatricule("EEB-",data[0].mat+1)
+            res.json({mat:data[0].mat+1,matricule:matricule})
+        }else{
+            const matricule = genMatricule("EEB-",1)
+            res.json({mat:1,matricule:matricule})        }
+        
     })
 }
