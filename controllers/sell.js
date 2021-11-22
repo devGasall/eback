@@ -11,35 +11,36 @@ Sell.insertMany(sells,(error, data) => {
                 error: "impossible de d'ajouter la vente"
             })
         }
-            data.map((sell)=>{
-                Product.findById(sell.product)
-                .exec((error,product)=>{
-                    if (error || !product) {
-                        errors.push({
-                            error: "impossible de retrouver les produits"
-                        })
-                    }
-                    product.quantity=product.quantity-sell.quantity
-                    product.sold=product.sold+sell.quantity
-                        product.save((error,selledProduct)=>{
-                            if (error || !selledProduct) {
-                                errors.push({
-                                    error: error
-                                })
-                            }
+        data.map((sell)=>{
+            Product.findById(sell.product)
+            .exec((error,product)=>{
+                if (error || !product) {
+                    errors.push({
+                        error: "impossible de retrouver les produits"
+                    })
+                }
+                product.quantity=product.quantity-sell.quantity
+                product.sold=product.sold+sell.quantity
+                console.log(product)
+                    product.save((error,selledProduct)=>{
+                        if (error || !selledProduct) {
+                            errors.push({
+                                error: error
+                            })
+                        }
 
-                            if(errors.length != 0){
-                                console.log(errors)
-                                res.status(400).json(errors)
-                            }else{
-                                res.json(data)
-                            }
-                        })
+                        if(errors.length != 0){
+                            console.log(errors)
+                            res.status(400).json(errors)
+                        }else{
+                            console.log('ok')
+                        }
+                    })
 
-                })
-                
             })
-        
+            
+        })
+        res.json(sells)
     })
 }
 exports.sellById = (req, res, next, id) => {
@@ -192,5 +193,17 @@ exports.sellMatricule=(req,res)=>{
             const matricule = genMatricule("VEB-",1)
             res.json({mat:1,matricule:matricule})        }
         
+    })
+}
+
+exports.sellsByMatricule=(req,res)=>{
+    Sell.find({matricule:req.param.matricule})
+    .exec((error,data)=>{
+        if (error) {
+            return res.json({
+                error: 'impossible de charger les ventes par ce matricule'
+            })
+        }
+        res.json(data)        
     })
 }

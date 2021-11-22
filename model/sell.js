@@ -5,6 +5,10 @@ const SellSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
+    matricule:{
+        type:String,
+        required:true
+    },
     shop:{
         type:ObjectId,
         ref:'Shop',
