@@ -123,9 +123,7 @@ exports.remove = (req, res) => {
                         }
                         if(errors.length!==0){
                             res.status(400).json(errors)
-                        }
-                        res.json([data,updatedProduct])
-                    })
+                        }                    })
 
             })
         res.json(data)
@@ -133,17 +131,24 @@ exports.remove = (req, res) => {
 }
 
 exports.list = (req, res) => {
-    let sortBy =req.query.sortBy ?req.query.sortBy:'createdAt'
-    let fromDate= req.query.fromDate ? new Date(req.query.fromDate) : new Date().setHours(0,0,0)
-    let toDAte= req.query.toDate ?new Date(req.query.toDate):new Date()
-    if(toDAte>Date.now() || toDAte<fromDate){
-        toDAte=new Date()
+    
+    let shop =req.query.shop ?req.query.shop:''
+    let fromDate= Date.parse(req.query.fromDate) ? Date.parse(req.query.fromDate) : new Date().setHours(0,0,0)
+    let toDate= Date.parse(req.query.toDate) ? Date.parse(req.query.toDate):new Date()
+    if(toDate>Date.now() || toDate<fromDate){
+        toDate=new Date()
     }
-
-    Sell.find({createdAt:{$gte:fromDate,$lte:toDAte}})
+    console.log(shop,fromDate,toDate)
+    var query
+    if(shop.length>0){
+        query = {createdAt:{$gte:fromDate,$lte:toDate},shop:shop}
+    }else{
+        query = {createdAt:{$gte:fromDate,$lte:toDate}}
+    }
+     
+    Sell.find(query)
         .populate("shop")
         .populate("product")
-        .sort(sortBy)
         .exec((error, data) => {
             if (error) {
                 return res.status(400).json({
