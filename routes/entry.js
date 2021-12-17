@@ -7,7 +7,7 @@ router.post('/entry',create)
 router.put('/entry/:entryId',update)
 router.get('/entry/:entryId',read)
 router.delete('/entry/:entryId',remove)
-router.get('/entries/:shopId',entryByShop)
+router.get('/entries/shop/:shopId',entryByShop)
 router.get('/entries',list)
 router.get('/matricule/entry',entryMatricule)
 
