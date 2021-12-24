@@ -29,7 +29,7 @@ exports.create = (req,res) => {
     res.send('ok')
 }
 exports.inventoryById=(req,res,next,id)=>{
-    inventory.findById(id)
+    Inventory.findById(id)
     .populate('product')
     .exec((error,data)=>{
         if(error || !data){

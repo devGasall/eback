@@ -76,12 +76,7 @@ exports.list = (req, res) => {
 exports.entryByShop = async (req, res) => {
     console.log(req)
     Entry.find({shop:req.shop._id})
-        .populate({
-            path:'product',
-            populate:{
-                path:''
-            }
-        })
+        .populate('product')
         .populate('shop')
         .exec((error, data) => {
             if (error) {
