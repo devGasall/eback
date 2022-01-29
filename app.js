@@ -7,7 +7,12 @@ const expressValidator = require('express-validator')
 let cors = require('cors');
 require('dotenv').config();
 
-
+const corsOptions={
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+  }
 //imported routes
 const userRoutes = require('./routes/user');
 const categoryRoutes = require('./routes/category')
@@ -26,7 +31,8 @@ const inventory = require('./routes/inventory')
 const app = express();
 
 //middlewares
-app.use(cors())
+
+app.use(cors(corsOptions))
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -65,7 +71,7 @@ app.get('/', (req, res) => {
 })
 
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
