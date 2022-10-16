@@ -3,6 +3,7 @@ const jwt= require('jsonwebtoken') // is used to generate signed token
 const expressJwt= require('express-jwt') // for authorization check
 
 const {errorHandler} =require('../helpers/dbErrorHandler')
+const { reset } = require('nodemon')
 
 exports.signup=(req,res)=>{
 console.log("req.body", req.body )
@@ -71,4 +72,12 @@ exports.isAdmin = (req,res,next)=>{
             })
         }
         next()
+}
+exports.usersList=(req,res)=>{
+    return User.find((err,data)=>{
+        if(err){
+            return res.status(403).json({error:"Il y a pas d'utilisateur pour votre application"})
+        }
+        res.json(data)
+    })
 }

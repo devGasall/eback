@@ -76,6 +76,7 @@ exports.returnsByShop = (req, res) => {
     Returns.find({ shop: req.shop._id })
         .populate('shop')
         .populate('product')
+        .populate('user')
         .exec((error, data) => {
             if (error) {
                 return res.status(400).json({

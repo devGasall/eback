@@ -1,6 +1,7 @@
 const Entry = require('../model/entry')
 const mongoose = require('mongoose')
 const {genMatricule} =require('./matricule')
+const { populate } = require('../model/entry')
 
 exports.create = (req, res) => {
     const entries = req.body
@@ -17,6 +18,7 @@ exports.entryById = (req, res, next, id) => {
     Entry.findById(id)
         .populate("shop")
         .populate("product")
+        .populate("user")
         .exec((error, data) => {
             if (error || !data) {
                 return res.status(400).json({
@@ -62,6 +64,7 @@ exports.list = (req, res) => {
     Entry.find()
         .populate("shop")
         .populate("product")
+        .populate("user")
         .exec((error, data) => {
             if (error) {
                 return res.status(400).json({
@@ -78,6 +81,7 @@ exports.entryByShop = async (req, res) => {
     Entry.find({shop:req.shop._id})
         .populate('product')
         .populate('shop')
+        populate('user')
         .exec((error, data) => {
             if (error) {
                 return res.status(400).json({

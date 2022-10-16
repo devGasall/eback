@@ -6,6 +6,11 @@ const ReturnsSchema = new mongoose.Schema({
         ref:'Shop',
         required:true,
     },
+    user:{
+        type:ObjectId,
+        ref:'User',
+        required:false,
+    },
     product:{
         type:ObjectId,
         ref:'Product',

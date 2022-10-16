@@ -14,6 +14,11 @@ const EntrySchema = new mongoose.Schema({
         ref:'Shop',
         required:true,
     },
+    user:{
+        type:ObjectId,
+        ref:'Product',
+        required:false,
+    },
     product:{
         type:ObjectId,
         ref:'Product',
