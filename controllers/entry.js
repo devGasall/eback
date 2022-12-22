@@ -16,8 +16,6 @@ exports.create = (req, res) => {
 }
 exports.entryById = (req, res, next, id) => {
     Entry.findById(id)
-        .populate("shop")
-        .populate("product")
         .populate("user")
         .exec((error, data) => {
             if (error || !data) {
@@ -36,7 +34,7 @@ exports.read = (req, res) => {
 exports.update = (req, res) => {
     mongoose.set('useFindAndModify', false);
     const { _id } = req.entry
-    Product.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
+    Entry.findByIdAndUpdate(_id, req.body, { new: true }, (error, data) => {
         if (error) {
             return res.status(400).json({
                 error: "cet entree ne peut etre modifier"

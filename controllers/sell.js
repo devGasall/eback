@@ -1,6 +1,7 @@
 const Sell = require('../model/sell')
 const Product = require('../model/product')
 const {genMatricule} = require('./matricule')
+const mongoose = require('mongoose')
 
 exports.create = (req, res) => {
     const sells = req.body
@@ -63,15 +64,16 @@ exports.read = (req, res) => {
 
 exports.update = (req, res) => {
     mongoose.set('useFindAndModify', false);
-    const { _id, productId } = req.sell
+    const { _id, product } = req.sell
+    console.log(req.sell)
     const errors=[]
-    Expense.findByIdAndUpdate(_id, req.body, { new: true }, (updatingError, data) => {
+    Sell.findByIdAndUpdate(_id, req.body, { new: true }, (updatingError, data) => {
         if (updatingError) {
             errors.push({
                 error: "cette vente ne peut etre modifier"
             })
         }
-                Product.findById(productId)
+                Product.findById(product)
                 .exec((findingError,product)=>{
                     if (findingError) {
                         errors.push({
